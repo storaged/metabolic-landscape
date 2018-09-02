@@ -136,3 +136,40 @@ exchdem.reactions <- apply(recon[,], 1, function(row){
         -0.01
     }
 })                               
+
+                               #############################
+## CREATE A LIST STRUCTURE ##
+## OF ALL BOOLEAN RULES    ##
+#############################
+
+reactions_composition <- lapply(1:nrow(enzymatic.reactions), function(i){
+    lapply(unlist(strsplit(as.character(enzymatic.reactions[i, "rules"]), "OR")), function(x)
+        sapply(str_extract_all(x, "[[:digit:]]+"), function(ands){
+          as.character(ands)
+          #ifelse(is.na(my.v), 0, my.v)
+        })
+    )
+})
+                               
+#########################
+## DETERMINE METABOLIC ##
+## LANDSCAPE BASED ON  ##
+## THE GENE ACTIVITY   ##
+#########################
+
+evaluate_reaction <- function(reaction_desc, activity_vector){
+    any(
+        unlist(
+            lapply(reaction_desc, function(and){
+                my.v <- all(as.logical(activity_vector[and]))
+                ifelse(is.na(my.v), 0, my.v)
+            })
+        )
+    )
+}
+
+determine.landscape <- function(act.vec){
+    sapply(1:nrow(enzymatic.reactions), function(i){
+        evaluate_reaction(reactions_composition[[i]], act.vec)
+    })
+}                               
