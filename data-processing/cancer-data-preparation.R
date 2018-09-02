@@ -1,3 +1,6 @@
+##
+## For a given dataset prefix prepare a data structure for the furhter analysis
+##
 prepare_data <- function(cancer_name, .unique.genes = unique.genes){
     enzymes.expression <- rse_data_to_counts(
         paste("rse_data/rse_gene_", cancer_name, ".Rdata", sep=""), 
