@@ -117,3 +117,22 @@ qq <- cbind(q,
 qq[grepl(pattern = "^M_h2o_.*", x = rownames(qq)),]
 #cbind(out.m, in.m)[order(in.m, decreasing = T), ][1:30,]
                         
+###
+## Determine exchange-demand reactions
+###   
+                               
+exchdem.reactions <- apply(recon[,], 1, function(row){
+    reaction <- row[2]
+    my.min <- as.numeric(row[3])
+    my.max <- as.numeric(row[4])
+
+    reactants_left <- metabolites_from_reaction(as.character(reaction), side='left') 
+    reactants_right <- metabolites_from_reaction(as.character(reaction), side='right') 
+    if( length(reactants_left) == 1 & all(reactants_left %in% exchange.demand.metabolites) ){
+        my.min + my.max
+    } else if ( length(reactants_right) == 1 & all(reactants_right %in% exchange.demand.metabolites) ) {
+        my.min + my.max
+    } else {
+        -0.01
+    }
+})                               
