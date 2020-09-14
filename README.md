@@ -1,5 +1,6 @@
-# metabolic-landscape
+# metabolic-landscape-analysis
 
-The repository contains scripts and function used in the study presented in the article: 
+The repository contains scripts and functions used in the study presented in the article: 
 
-"Renall cell carcinoma classification: a case study of pitfalls associated with metabolic landscape analysis"
+*Low entropy sub-networks prevent the integration of metabolomic and transcriptomic data.*
+
