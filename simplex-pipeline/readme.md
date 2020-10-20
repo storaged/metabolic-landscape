@@ -5,10 +5,10 @@ To perform the computations it is necessary to match the requirements
 
 ## Requirements: 
 1. Prepare the environment: 
-* gurobi_cl from Gurobi Command-Line Tool, see [Gurobi Docs](https://www.gurobi.com/documentation/9.0/refman/grb_command_line_tool.html)
-* python 2.7 libraries: joblib, numpy, matplotlib, glob
+* `gurobi_cl` from Gurobi Command-Line Tool, see [Gurobi Docs](https://www.gurobi.com/documentation/9.0/refman/grb_command_line_tool.html)
+* `python2.7` libraries: `joblib`, `numpy`, `matplotlib`, `glob`
 
-2. Define *paths* in the main pipeline script: **perform_full_metabolic_analysis.sh**
+2. Set *paths* to needed files in the main pipeline script: **perform_full_metabolic_analysis.sh**
 * **model** a path to the .sfba model file
 * **soldir** a path to the dictionary in which resulting files will be stored 
 * **act_mat** a path to the file with gene activity values for each sample in the study 
