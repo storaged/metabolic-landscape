@@ -5,7 +5,7 @@ To perform the computations it is necessary to match the requirements
 
 ## Requirements: 
 1. Prepare the environment: 
-* `gurobi_cl` from Gurobi Command-Line Tool, see [Gurobi Docs](https://www.gurobi.com/documentation/9.0/refman/grb_command_line_tool.html)
+* `gurobi_cl` from Gurobi Command-Line Tool, see [Gurobi Docs](https://www.gurobi.com/documentation/9.0/refman/grb_command_line_tool.html) and [Gurobi License](https://www.gurobi.com/academia/academic-program-and-licenses/)
 * `python2.7` libraries: `joblib`, `numpy`, `matplotlib`, `glob`
 
 2. Set *paths* to needed files in the main pipeline script: **perform_full_metabolic_analysis.sh**
