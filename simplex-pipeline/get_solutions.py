@@ -27,8 +27,10 @@ def get_solution_files(directory):
 def get_flow_dict(model_file, patient, genes_matrix, sol_directory):
 	r = get_reaction_list_irr(model_file)#"../data/model_transform.sfba")
 	patients_dict = get_patients_dict(genes_matrix)
-	activity_dict = istrue(model_file, patient, patients_dict[patient])		
-	reversal_dict = {}	
+        
+        activity_dict = istrue(model_file, patient, patients_dict[patient])		
+
+        reversal_dict = {}	
 	for i in r[2]:
 		activity = activity_dict[i]
 		if activity == 1:
@@ -41,7 +43,7 @@ def get_flow_dict(model_file, patient, genes_matrix, sol_directory):
 			reversal_dict[j] = val
 		
 	solution_dict = {}
-	f = open(sol_directory + "program" + patient + ".sol")
+	f = open(sol_directory + "/program" + patient + ".sol")
 	f.readline()
 	for i in f:
 		if i[0] == "i":
@@ -57,7 +59,6 @@ def get_flow_dict(model_file, patient, genes_matrix, sol_directory):
                 else:
                         print "Done."
 			break
-	
 	return solution_dict
 
 def calculate_patient(s, model_file, table_file, sol_directory, r):
@@ -65,6 +66,7 @@ def calculate_patient(s, model_file, table_file, sol_directory, r):
         patient = s[7:-4]
 	flux_row = [patient]
 	flow_dict = get_flow_dict(model_file, patient, table_file, sol_directory)
+        #print flow_dict.keys()
         for i in r[1]:
 	        if i in flow_dict:
 		        flux_row.append(flow_dict[i])
@@ -73,7 +75,7 @@ def calculate_patient(s, model_file, table_file, sol_directory, r):
 	#matrix.append(flux_row)
         #print flux_row
         #print sol_directory+"tmp"+patient+".tmp"
-        with open(sol_directory+"tmp"+patient+".tmp", "w") as f:
+        with open(sol_directory+"/tmp"+patient+".tmp", "w") as f:
                 #f.write("\t".join([str(j) for j in flux_row]) + "\n")
                 writer = csv.writer(f)
                 writer.writerow(flux_row)
@@ -84,22 +86,26 @@ def create_matrix(model_file, table_file, sol_directory):
 	from joblib import Parallel, delayed
         import csv
 
+        N_JOBS = 2
+        
         r = get_reaction_list_irr(model_file)
 	patients = get_patients_dict(table_file)
 	matrix = []
 	first_row = ["patient"]
 	first_row.extend(r[1])
 	matrix.append(first_row)
-	
-	solutions = get_solution_files(sol_directory)
-	
 
-        Parallel(n_jobs=48)(delayed(calculate_patient)(s, model_file, table_file, sol_directory, r) for s in solutions)
+	solutions = get_solution_files(sol_directory)
+
+        #Parallel(n_jobs=N_JOBS)(delayed(calculate_patient)(s, model_file, table_file, sol_directory, r) for s in solutions)
 
         for s in solutions:
+                calculate_patient(s, model_file, table_file, sol_directory, r)
+
+        
+        for s in solutions:
                 patient = s[7:-4]
-                print sol_directory+"tmp"+patient+".tmp"
-                with open(sol_directory+"tmp"+patient+".tmp", "r") as f:
+                with open(sol_directory+"/tmp"+patient+".tmp", "r") as f:
                         #content = f.readlines()
                         reader = csv.reader(f)
                         i = False
@@ -196,7 +202,6 @@ def filter2(infile, outfile):
 		name = m[i][0][:-1]
 		row = []
 		if m[i][0][:-1] == m[i+1][0][:-1]:
-			print name
 			row.append(name)
 			for j in range(1, len(m[i])):
 				res = integrate(m[i][j], m[i+1][j])
@@ -258,7 +263,7 @@ if __name__ == "__main__":
 	gene_matrix = sys.argv[2]
 	sols = sys.argv[3]
 	m = create_matrix(metabolic_model, gene_matrix, sols)
-	save_matrix(m, "matrix_0.csv")
+        save_matrix(m, "matrix_0.csv")
 	filter1("matrix_0.csv", "matrix_1.csv")
 	filter2("matrix_1.csv", "matrix_2.csv")
 	#filter3("matrix_2.csv", "matrix_3.csv")

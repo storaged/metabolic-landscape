@@ -18,11 +18,12 @@ def get_patients_dict(table):
 		 
 	patients_dict = {}
 	for i in patients:
-		patients_dict[i] = {}
+		patients_dict[i.replace('"', '')] = {}
 		 
 	for i in f:
 		l = i.strip().split("\t")
 		gene = l[0]
+
 		for j in range(len(l[1:])):
 			patients_dict[patients[j]][gene] = int(l[1:][j])
 	return patients_dict
@@ -202,7 +203,7 @@ def sv(matrix):
 		c +=1
 		rule = ""
 		subrules = []
-
+                
 		for j in range(len(row)):
 			if row[j] == 0:
 				pass
@@ -309,15 +310,17 @@ def writematrix(m):
 	
 def write_program(metabolic_model, name, gene_activity):
 	""" Zapisuje program liniowy jednego pacjenta """
-	print name
-	r = get_reaction_list_irr(metabolic_model)
+	name = name.replace('"', '')
+        
+        r = get_reaction_list_irr(metabolic_model)
 	v_dict_irr = get_v_dict_irr(metabolic_model)
 	bounds = get_vs_irr(metabolic_model)
 	activity_dict = istrue(metabolic_model, name, gene_activity)
 	rules = get_rules_irr(metabolic_model, r[0], activity_dict)	
 	
 	matrix = get_matrix_irr(metabolic_model)
-	s = sv(matrix)	
+        
+        s = sv(matrix)	
 
 	g = open("program" + name + ".lp", "w+")
 	g.write("Max obj: ")
@@ -350,13 +353,13 @@ def write_program(metabolic_model, name, gene_activity):
 	
 def write_all(metabolic_model, infile):
 	""" Zapisuje program liniowy dla wszystkich pacjentow w biezacym folderze"""
-	from joblib import Parallel, delayed
+	#from joblib import Parallel, delayed
         patients = get_patients_dict(infile)
 	
-        Parallel(n_jobs=48)(delayed(write_program)(metabolic_model, i, patients[i]) for i in patients)
-        #for i in patients:
-	#	print i
-	#	write_program(metabolic_model, i, patients[i])
+        #Parallel(n_jobs=2)(delayed(write_program)(metabolic_model, i, patients[i]) for i in patients)
+        for i in patients:
+                print i
+		write_program(metabolic_model, i, patients[i])
 
 if __name__ == "__main__":
 	metabolic_model = sys.argv[1]
