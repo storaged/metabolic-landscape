@@ -6,4 +6,4 @@ The directory contains all files that are used in the analysis:
 
 Additional file, becasue of their size, are available through external links:
 * [raw RNA-seq counts](https://drive.google.com/file/d/16uCN3jAuAdfUMdwjCJHh16euYobeWPbX/view?usp=sharing) file in the .csv format contains all kidney samples from TCGA repository with samples tagged with *gdc_file_id* and genes encoded with the *ensembl_id*;
-* [rse TCGA kidney data]() file in the .Rdata format includes experiment results along with all meta-/clinical data description for each sample.
+* [RSE TCGA kidney data](https://drive.google.com/file/d/1NExMB4WnUOFd-uBBvKJ32Mjp8eRPk9R3/view?usp=sharing) file in the .Rdata format includes experiment results along with all meta-/clinical data description for each sample accoring to the RangedSummarizedExperiment class.
